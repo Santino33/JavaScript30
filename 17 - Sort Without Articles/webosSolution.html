@@ -73,44 +73,15 @@
         "Anywhere But Here",
         "An Old Dog"
       ];
-      const articles = ["An", "A", "The", "Oh"]
-      const sortedBands = bands.sort(function(a, b) {
-        if(getFirstLetterWithoutArticles(a) > getFirstLetterWithoutArticles(b)) return 1
-        else return -1
-      })
-
-      createHtmlComponents(sortedBands);
-
-      function getFirstLetterWithoutArticles(band){
-        let sortLetter;
-        let isArticle = false;
-
-        //Get first word of band
-        firstWord = band.includes(" ") ? band.split(" ", 1)[0] : null;
-        if(firstWord == null) return band.charAt(0).toLowerCase();
-
-        //Clean first word
-        firstWord = firstWord.replace(/,/g, "");
-        
-        //Check if first word is an article
-        articles.map(article => {
-          if(article.toLowerCase() == (firstWord.toLowerCase())) isArticle = true;
-        });
-
-        if(isArticle) {
-          return band.split(" ").slice(1).join(" ").charAt(0).toLowerCase();
-        }
-        else {
-          return band.charAt(0).toLowerCase();
-        }
+      
+      function strip(band){
+        return band.replace(/^(a|an|the)\s+/i, "").trim();
       }
 
-      function createHtmlComponents(list){
-        bandsList.innerHTML = list.map((band) =>{
-          console.log(band);
-          return `<li class="band">${band}</li>`
-        }).join('');
-      }
+      const sortedBands = bands.sort((a,b) => strip(a) > strip(b) ? 1 : -1);
+
+      document.querySelector('#bands').innerHTML =
+        sortedBands.map(band => `<li class="band">${band}</li>`).join("");
     </script>
   </body>
 </html>

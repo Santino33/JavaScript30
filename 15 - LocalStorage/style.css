@@ -58,7 +58,8 @@ h2 {
 }
 
 .plates input {
-  display: none;
+  opacity: 0;
+  position: absolute;
 }
 
 .plates input + label:before {

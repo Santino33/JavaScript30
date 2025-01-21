@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resolved</title>
+</head>
+<body>
+    <style>
+        html {
+            box-sizing: border-box;
+            background: #ffc600;
+        }
+
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        *, *:before, *:after {
+            box-sizing: inherit;
+        }
+
+        .inbox{
+            display: flex;
+            flex-direction: column;
+            align-self: center;
+            width: 40vw;
+            margin-top: 10vh;
+            background: #fafafa;
+            border-radius: 5px;
+            box-shadow: 7px 7px 0px 1px rgba(129, 129, 129, 0.5);
+        }
+
+        .inbox > *:not(:last-child){
+            border-bottom: 1px solid #e6e6e6;
+        }
+        
+        .item {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .item > input{
+            margin-inline: 20px;
+            width: 10px;
+            color: #b6b6b6ab;
+        }
+
+        .item > p{
+            font-family: 'Montserrat', sans-serif;
+            margin-right: 20px;
+            font-size: 15px;
+        }
+
+        .selected{
+            text-decoration: line-through;
+        }
+
+    </style>
+
+    <div class="inbox">
+        <div class="item">
+            <input type="checkbox">
+            <p>Get up from bed</p>
+        </div>
+        <div class="item">
+            <input type="checkbox">
+            <p>Take breakfast</p>
+        </div>
+        <div class="item">
+            <input type="checkbox">
+            <p>Brush you teeth</p>
+        </div>
+        <div class="item">
+            <input type="checkbox">
+            <p>Get ready for school</p>
+        </div>
+        <div class="item">
+            <input type="checkbox">
+            <p>Go to the school</p>
+        </div>
+        <div class="item">
+            <input type="checkbox">
+            <p>Study the whole day!</p>
+        </div>
+        <div class="item">
+            <input type="checkbox">
+            <p>Come home to rest</p>
+        </div>
+    </div>
+
+    <script>
+
+        const checkboxes = document.querySelectorAll('.inbox input[type=checkbox]');
+        checkboxes.forEach(checkbox => checkbox.addEventListener('click', handleCheck));
+
+        let lastChecked;
+
+        function handleCheck(e){
+            let inBetween = false;
+            if(e.shiftKey && this.checked && lastChecked != undefined){
+                checkboxes.forEach(checkbox => {
+                    if(checkbox === this || checkbox === lastChecked){
+                        checkbox.checked =!checkbox.checked;
+                        inBetween =!inBetween;
+                    }
+
+                    if(inBetween){
+                        checkbox.checked = true;
+                    }
+                });
+            }
+            lastChecked = this;
+        }
+
+    </script>
+</body>
+</html>

@@ -2,22 +2,181 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Type Ahead 👀</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Flex Panels 💪</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="icon" href="https://fav.farm/🔥" />
 </head>
 <body>
+  <style>
+    html {
+      box-sizing: border-box;
+      background: #ffc600;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 15px;
+      font-weight: 0;
+    }
 
-  <form class="search-form">
-    <input type="text" class="search" placeholder="City or State">
-    <ul class="suggestions">
-      <li>Filter for a city</li>
-      <li>or a state</li>
-    </ul>
-  </form>
-<script>
-const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+    body {
+      margin: 0;
+    }
 
-</script>
+    *, *:before, *:after {
+      box-sizing: inherit;
+    }
+    .inputContainer{
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      background-color: #eeeeee;
+      padding: 5px;
+      margin-inline: 30vw;
+      margin-top: 5vh;
+      border-radius: 5px;
+    }
+
+    .inputContainer > input{
+      width: 100%;
+      padding: 10px;
+      border: none;
+      height: 6vh;
+      text-align: center;
+      border-radius: 5px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 20px;
+    }
+
+    .inputContainer > input:focus{
+      border: 1px solid #c9c9c9;
+      outline: none;
+    }
+
+    .suggestionsContainer{
+      display: flex;
+      justify-content: center;  
+      flex-direction: column;
+      margin-inline: 20vw;
+    }
+
+    .suggestion{
+      height: 30px;
+      display: flex;
+      align-items: center;
+      background-color: #fafafa;
+      padding-inline: 10px;
+      text-align: center;
+      justify-content: space-between;
+      border: solid 1px #f1f1f1;
+    }
+
+    .suggestion > span:nth-child(1){
+      font-size: 14px;
+      align-self:flex-start;
+      font-weight: 500;
+      text-align: center;
+      line-height: 30px;
+
+    }
+
+    .suggestion > span:nth-child(2){
+      font-size: 12px;
+      font-weight: 300;
+      align-self: flex-end;
+      line-height: 30px;
+
+    }
+
+    .hl{
+      background-color: #ffc600;
+      font-size: 14px;
+      align-self:flex-start;
+      font-weight: 500;
+    }
+
+
+
+
+    @media screen and (max-width: 600px) {
+     .inputContainer {
+        margin-inline: 0px;
+      }
+     .suggestion > span + span {
+        font-size: 5px;
+        font-weight: 100;
+      }
+    }
+
+
+
+  </style>
+
+  <div class="inputContainer">
+    <input type="text" class="searchInput" Search something">
+  </div>
+
+  <div class="suggestionsContainer">
+    <div class="suggestion">
+      <span class="name">Filter For A American City</span>
+      <span class="population" ></span>
+    </div>
+    <div class="suggestion">
+      <span>Or A State</span>
+      <span></span>
+    </div>
+  </div>
+
+  <script>
+    const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+
+    const cities = [];
+
+  fetch(endpoint)
+  .then(blob => blob.json())
+  .then(data => {
+    cities.push(...data);
+  });
+
+  function numberWithCommas(x) {
+    x = x.toString();
+    var pattern = /(-?\d+)(\d{3})/;
+    while (pattern.test(x))
+        x = x.replace(pattern, "$1,$2");
+    return x;
+  }
+    
+  function findMatches(wordToMatch, cities){
+    return cities.filter(place => {
+      const regex = new RegExp(wordToMatch, "gi");
+      return place.city.match(regex) || place.state.match(regex);
+    });
+  }
+
+  function displayMatches(){
+    const matchArray = findMatches(this.value, cities);
+    const html = matchArray.map(place => {
+      const regex = new RegExp(this.value, "gi");
+      const city = place.city.replace(regex, `<span class="hl">${this.value}</span>`);
+      const state = place.state.replace(regex, `<span class="hl">${this.value}</span>`);
+
+      console.log(city);
+      return `
+        <div class="suggestion">
+          <span class="name">${city}, ${state}</span>
+          <span class="population">${numberWithCommas(place.population)}</span>
+        </div>
+      `;
+    }).join('');
+    suggestions.innerHTML = html;
+  }
+
+  const searchInput = document.querySelector('.searchInput');
+  const suggestions = document.querySelector('.suggestionsContainer');
+  searchInput.addEventListener('change', displayMatches);
+  searchInput.addEventListener('keyup', displayMatches);
+
+  </script>
+
+
+
 </body>
 </html>
