@@ -30,7 +30,8 @@ function paintOnCanvas(){
       // mess with them
       //pixels = redEffect(pixels);
       //pixels = rgbSplit(pixels);
-      pixels = greenScreen(pixels);
+      //pixels = greenScreen(pixels);
+      pixels = negativeEffect(pixels);
       // put them back 
       //ctx.globalAlpha =0.1;
       ctx.putImageData(pixels, 0,0);
@@ -92,6 +93,16 @@ function greenScreen(pixels) {
       // take it out!
       pixels.data[i + 3] = 0;
     }
+  }
+
+  return pixels;
+}
+
+function negativeEffect(pixels){
+  for(i = 0; i < pixels.data.length; i += 4){
+    pixels.data[i + 0] = 255 - pixels.data[i + 0]; // red
+    pixels.data[i + 1] = 255 - pixels.data[i + 1]; // green
+    pixels.data[i + 2] = 255 - pixels.data[i + 2]; // blue
   }
 
   return pixels;
