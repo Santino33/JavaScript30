@@ -104,7 +104,7 @@ function negativeEffect(pixels){
     pixels.data[i + 1] = 255 - pixels.data[i + 1]; // green
     pixels.data[i + 2] = 255 - pixels.data[i + 2]; // blue
   }
-
+  
   return pixels;
 }
 
